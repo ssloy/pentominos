@@ -24,6 +24,14 @@ Piece::Piece(ifstream &in) : width_(0), height_(0), sin_(0), cos_(1), flip_(1) {
 Piece::~Piece() {
 }
 
+int Piece::size() {
+    return (int)coords.size();
+}
+
+Vec2i Piece::cell(int i) {
+    return rotate(coords[i]);
+}
+
 int Piece::w() {
     Vec2i tmp = rotate_wo_offset(Vec2i(width_, height_));
     return abs(tmp.x);
@@ -55,25 +63,5 @@ Vec2i Piece::rotate(Vec2i c) {
     offset = Vec2i(max(0, -offset.x), max(0, -offset.y));
     Vec2i pt = rotate_wo_offset(c);
     return pt+offset;
-}
-
-void Piece::print() {
-    char *p = new char[width_*height_];
-    for (int i=0; i<width_*height_; i++) {
-        p[i] = ' ';
-    }
-
-    for (int i=0; i<(int)coords.size(); i++) {
-        Vec2i pt = rotate(coords[i]);
-        p[pt.x + pt.y*w()] = '#';
-    }
-    for (int j=0; j<h(); j++) {
-        for (int i=0; i<w(); i++) {
-            cout << p[i+j*w()];
-        }
-        cout << endl;
-    }
-
-    delete [] p;
 }
 

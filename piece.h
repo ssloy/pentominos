@@ -20,9 +20,10 @@ public:
     ~Piece();
     int w();
     int h();
+    int size();
+    Vec2i cell(int i);
     void rotate();
     void flip();
-    void print();
 };
 
 #endif //__PIECE_H__

@@ -7,6 +7,29 @@
 #include "piece.h"
 
 using namespace std;
+
+void print_piece(Piece *p) {
+    if (!p) return;
+    int w = p->w();
+    int h = p->h();
+    char *data = new char[w*h];
+    for (int i=0; i<w*h; i++) {
+        data[i] = ' ';
+    }
+    for (int i=0; i<p->size(); i++) {
+        Vec2i pt = p->cell(i);
+        data[pt.x + pt.y*w] = '#';
+    }
+    for (int j=0; j<h; j++) {
+        for (int i=0; i<w; i++) {
+            cout << data[i+j*w];
+        }
+        cout << endl;
+    }
+
+    delete [] data;
+}
+
 int main(int argc, char** argv) {
     string filename = string(2==argc ? argv[1] : "pentomino.txt");
     ifstream in;
@@ -20,7 +43,7 @@ int main(int argc, char** argv) {
     }
     in.close();
 
-    pieces[0].print();
+    print_piece(&(pieces[0]));
     cout << endl;
 
     srand(time(NULL));
@@ -30,7 +53,7 @@ int main(int argc, char** argv) {
             pieces[i].rotate();
         }
         if (rand()%2) pieces[i].flip();
-        pieces[i].print();
+        print_piece(&(pieces[i]));
         cout << endl;
     }
 
