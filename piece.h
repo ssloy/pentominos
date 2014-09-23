@@ -2,34 +2,27 @@
 #define __PIECE_H__
 
 #include <vector>
-
-struct Couple {
-    int x, y;
-    Couple(int X, int Y) : x(X), y(Y) {}
-    inline Couple operator +(const Couple &v) const { return Couple(x+v.x, y+v.y); }
-    inline Couple operator -(const Couple &v) const { return Couple(x-v.x, y-v.y); }
-};
-
+#include "vec2i.h"
 
 class Piece {
-    private:
-        int width_;
-        int height_;
-        int sin_;
-        int cos_;
-        int flip_;
-        std::vector<Couple> coords;
+private:
+    int width_;
+    int height_;
+    int sin_;
+    int cos_;
+    int flip_;
+    std::vector<Vec2i> coords;
 
-        Couple rotate_wo_offset(Couple c);
-        Couple rotate(Couple c);
-    public:
-        Piece(std::ifstream &in);
-        ~Piece();
-        int w();
-        int h();
-        void rotate();
-        void flip();
-        void print();
+    Vec2i rotate_wo_offset(Vec2i c);
+    Vec2i rotate(Vec2i c);
+public:
+    Piece(std::ifstream &in);
+    ~Piece();
+    int w();
+    int h();
+    void rotate();
+    void flip();
+    void print();
 };
 
 #endif //__PIECE_H__

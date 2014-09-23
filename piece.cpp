@@ -15,7 +15,7 @@ Piece::Piece(ifstream &in) : width_(0), height_(0), sin_(0), cos_(1), flip_(1) {
         if (!line.length() || string::npos==occ) break;
         width_ = max(width_, (int)occ+1);
         for (int i=0; i<(int)line.length(); i++) {
-            if (line[i]=='#') coords.push_back(Couple(i, height_));
+            if (line[i]=='#') coords.push_back(Vec2i(i, height_));
         }
         height_++;
     }
@@ -25,12 +25,12 @@ Piece::~Piece() {
 }
 
 int Piece::w() {
-    Couple tmp = rotate_wo_offset(Couple(width_, height_));
+    Vec2i tmp = rotate_wo_offset(Vec2i(width_, height_));
     return abs(tmp.x);
 }
 
 int Piece::h() {
-    Couple tmp = rotate_wo_offset(Couple(width_, height_));
+    Vec2i tmp = rotate_wo_offset(Vec2i(width_, height_));
     return abs(tmp.y);
 }
 
@@ -44,16 +44,16 @@ void Piece::flip() {
     flip_ = -flip_;
 }
 
-Couple Piece::rotate_wo_offset(Couple c) {
+Vec2i Piece::rotate_wo_offset(Vec2i c) {
 // cout << "(" << flip_ << " " << 0 << ") x ( " << cos_ << "  " << -sin_ << ")" << endl;
 // cout << "(" <<     0 << " " << 1 << ")   ( " << sin_ << "  " <<  cos_ << ")" << endl;
-   return Couple(flip_*cos_*c.x - flip_*sin_*c.y, sin_*c.x + cos_*c.y);
+   return Vec2i(flip_*cos_*c.x - flip_*sin_*c.y, sin_*c.x + cos_*c.y);
 }
 
-Couple Piece::rotate(Couple c) {
-    Couple offset = rotate_wo_offset(Couple(width_-1, height_-1));
-    offset = Couple(max(0, -offset.x), max(0, -offset.y));
-    Couple pt = rotate_wo_offset(c);
+Vec2i Piece::rotate(Vec2i c) {
+    Vec2i offset = rotate_wo_offset(Vec2i(width_-1, height_-1));
+    offset = Vec2i(max(0, -offset.x), max(0, -offset.y));
+    Vec2i pt = rotate_wo_offset(c);
     return pt+offset;
 }
 
@@ -64,7 +64,7 @@ void Piece::print() {
     }
 
     for (int i=0; i<(int)coords.size(); i++) {
-        Couple pt = rotate(coords[i]);
+        Vec2i pt = rotate(coords[i]);
         p[pt.x + pt.y*w()] = '#';
     }
     for (int j=0; j<h(); j++) {
