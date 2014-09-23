@@ -4,8 +4,10 @@
 #include <vector>
 
 struct Couple {
-    Couple(int X, int Y) : x(X), y(Y) {}
     int x, y;
+    Couple(int X, int Y) : x(X), y(Y) {}
+    inline Couple operator +(const Couple &v) const { return Couple(x+v.x, y+v.y); }
+    inline Couple operator -(const Couple &v) const { return Couple(x-v.x, y-v.y); }
 };
 
 

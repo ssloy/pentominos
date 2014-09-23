@@ -51,11 +51,10 @@ Couple Piece::rotate_wo_offset(Couple c) {
 }
 
 Couple Piece::rotate(Couple c) {
-    Couple tmp = rotate_wo_offset(Couple(width_-1, height_-1));
-    tmp.x = max(0, -tmp.x);
-    tmp.y = max(0, -tmp.y);
+    Couple offset = rotate_wo_offset(Couple(width_-1, height_-1));
+    offset = Couple(max(0, -offset.x), max(0, -offset.y));
     Couple pt = rotate_wo_offset(c);
-    return Couple(pt.x+tmp.x, pt.y+tmp.y);
+    return pt+offset;
 }
 
 void Piece::print() {

@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <cstdlib>
+#include <ctime>
 #include "piece.h"
 
 using namespace std;
@@ -18,16 +20,20 @@ int main(int argc, char** argv) {
     }
     in.close();
 
-    for (int i=0; i<(int)pieces.size(); i++) {
-        for (int j=0; j<i; j++) {
+    pieces[0].print();
+    cout << endl;
+
+    srand(time(NULL));
+    for (int i=1; i<(int)pieces.size(); i++) {
+        int n = rand()%8;
+        for (int j=0; j<n; j++) {
             pieces[i].rotate();
-            if (j%3) pieces[i].flip();
         }
+        if (rand()%2) pieces[i].flip();
         pieces[i].print();
-        std::cout << std::endl;
+        cout << endl;
     }
 
-    pieces[3].print();
     return 0;
 }
 
