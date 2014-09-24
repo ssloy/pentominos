@@ -31,24 +31,21 @@ int Piece::size() {
 Vec2i Piece::cell(int i) {
     Vec2i offset = rotate_wo_offset(Vec2i(width_-1, height_-1));
     offset = Vec2i(max(0, -offset.x), max(0, -offset.y));
-    Vec2i pt = rotate_wo_offset(coords_[i]);
-    return pt+offset;
+    return rotate_wo_offset(coords_[i]) + offset;
 }
 
 int Piece::w() {
-    Vec2i tmp = rotate_wo_offset(Vec2i(width_, height_));
-    return abs(tmp.x);
+    return abs(rotate_wo_offset(Vec2i(width_, height_)).x);
 }
 
 int Piece::h() {
-    Vec2i tmp = rotate_wo_offset(Vec2i(width_, height_));
-    return abs(tmp.y);
+    return abs(rotate_wo_offset(Vec2i(width_, height_)).y);
 }
 
 void Piece::rotate() {
-    int tmp = cos_;
-    cos_ = -sin_;
-    sin_ = tmp;
+    int tmp =  cos_;
+    cos_    = -sin_;
+    sin_    =  tmp;
 }
 
 void Piece::flip() {
