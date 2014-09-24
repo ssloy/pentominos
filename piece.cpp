@@ -15,7 +15,7 @@ Piece::Piece(ifstream &in) : width_(0), height_(0), sin_(0), cos_(1), flip_(1) {
         if (!line.length() || string::npos==occ) break;
         width_ = max(width_, (int)occ+1);
         for (int i=0; i<(int)line.length(); i++) {
-            if (line[i]=='#') coords.push_back(Vec2i(i, height_));
+            if (line[i]=='#') coords_.push_back(Vec2i(i, height_));
         }
         height_++;
     }
@@ -25,11 +25,14 @@ Piece::~Piece() {
 }
 
 int Piece::size() {
-    return (int)coords.size();
+    return (int)coords_.size();
 }
 
 Vec2i Piece::cell(int i) {
-    return rotate(coords[i]);
+    Vec2i offset = rotate_wo_offset(Vec2i(width_-1, height_-1));
+    offset = Vec2i(max(0, -offset.x), max(0, -offset.y));
+    Vec2i pt = rotate_wo_offset(coords_[i]);
+    return pt+offset;
 }
 
 int Piece::w() {
@@ -53,15 +56,6 @@ void Piece::flip() {
 }
 
 Vec2i Piece::rotate_wo_offset(Vec2i c) {
-// cout << "(" << flip_ << " " << 0 << ") x ( " << cos_ << "  " << -sin_ << ")" << endl;
-// cout << "(" <<     0 << " " << 1 << ")   ( " << sin_ << "  " <<  cos_ << ")" << endl;
-   return Vec2i(flip_*cos_*c.x - flip_*sin_*c.y, sin_*c.x + cos_*c.y);
-}
-
-Vec2i Piece::rotate(Vec2i c) {
-    Vec2i offset = rotate_wo_offset(Vec2i(width_-1, height_-1));
-    offset = Vec2i(max(0, -offset.x), max(0, -offset.y));
-    Vec2i pt = rotate_wo_offset(c);
-    return pt+offset;
+  return Vec2i(flip_*cos_*c.x - flip_*sin_*c.y, sin_*c.x + cos_*c.y);
 }
 

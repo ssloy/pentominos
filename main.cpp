@@ -26,7 +26,6 @@ void print_piece(Piece *p) {
         }
         cout << endl;
     }
-
     delete [] data;
 }
 
