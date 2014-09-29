@@ -39,7 +39,6 @@ void Collection::sort() {
 }
 
 void Collection::render(SDL_Surface *screen) {
-    sort();
     srand(3);
     for (int i=0; i<(int)z.size(); i++) {
         int r = rand()%255;
@@ -68,12 +67,9 @@ bool Collection::popup(Vec2i p) {
     }
     if (idx>=0) {
         z[idx] = ++maxz;
+        sort();
     }
     return idx!=-1;
 }
 
-void Collection::topmost_move(Vec2i dxdy) {
-    sort();
-    pos.back() = pos.back() + dxdy;
-}
 

@@ -13,7 +13,6 @@ struct Collection {
     void render(SDL_Surface *screen);
     void sort();
     bool popup(Vec2i p);  // floats the piece to the top
-    void topmost_move(Vec2i dxdy);
 
     std::vector<Piece> pieces;
     std::vector<int> z;
