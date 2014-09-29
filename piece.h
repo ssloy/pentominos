@@ -1,6 +1,7 @@
 #ifndef __PIECE_H__
 #define __PIECE_H__
 
+#include <fstream>
 #include <vector>
 #include "vec2i.h"
 

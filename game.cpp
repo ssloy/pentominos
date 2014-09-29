@@ -1,10 +1,13 @@
+#include <SDL/SDL.h>
 #include <iostream>
+#include <string>
 #include "game.h"
+#include "vec2i.h"
 
-Game::Game() : running_(false) {
+Game::Game(std::string filename) : running_(false), collection_(filename) {
 }
 
-bool Game::init(const char* title, int width, int height, int bpp) {
+bool Game::init_sdl(const char* title, int width, int height, int bpp) {
     if (SDL_Init(SDL_INIT_EVERYTHING)) {
         std::cerr << "SDL_Init failed, SDL_GetError()=" << SDL_GetError() << std::endl;
         return false;
@@ -21,8 +24,7 @@ bool Game::init(const char* title, int width, int height, int bpp) {
     bpp_ = bpp;
 
     grab_ = -1;
-    x_ = 128;
-    y_ = 128;
+    grab_pt_ = Vec2i(0,0);
     return true;
 }
 
@@ -35,35 +37,26 @@ void Game::handle_events() {
     if (SDL_PollEvent(&event)) {
         running_ = !(SDL_QUIT==event.type || (SDL_KEYDOWN==event.type && SDLK_ESCAPE==event.key.keysym.sym));
          if (SDL_MOUSEBUTTONDOWN==event.type && SDL_BUTTON_LEFT==event.button.button) {
-            int x = event.button.x;
-            int y = event.button.y;
-            if (x>=x_ && x<x_+64 && y>=y_ && y<y_+64) {
+            Vec2i p = Vec2i(event.button.x, event.button.y);
+            if (collection_.popup(p)) {
                 grab_ = 1;
-                grab_x_ = x;
-                grab_y_ = y;
+                grab_pt_ = p;
             }
          }
          if (SDL_MOUSEBUTTONUP==event.type && SDL_BUTTON_LEFT==event.button.button) {
             grab_ = -1;
          }
-         if ( event.type == SDL_MOUSEMOTION && grab_>=0) {
-            x_ += event.motion.x-grab_x_;
-            y_ += event.motion.y-grab_y_;
-            grab_x_ = event.motion.x;
-            grab_y_ = event.motion.y;
+         if (event.type == SDL_MOUSEMOTION && grab_>=0) {
+            Vec2i p = Vec2i(event.motion.x, event.motion.y);
+            collection_.topmost_move(p-grab_pt_);
+            grab_pt_ = p;
          }
     }
 }
 
 void Game::draw() {
     SDL_FillRect(sdl_screen_, NULL, SDL_MapRGB(sdl_screen_->format, 255, 255, 255));
-    SDL_Rect tmp;
-    tmp.w = 64;
-    tmp.h = 64;
-    tmp.x = x_;
-    tmp.y = y_;
-    SDL_FillRect(sdl_screen_, &tmp, SDL_MapRGB(sdl_screen_->format, 255, 0, 0));
-
+    collection_.render(sdl_screen_);
     SDL_Flip(sdl_screen_);
 }
 

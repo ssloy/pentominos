@@ -2,11 +2,15 @@
 #define _GAME_H_
 
 #include <SDL/SDL.h>
+#include <string>
+
+#include "collection.h"
+#include "vec2i.h"
 
 class Game {
 public:
-    Game();
-    bool init(const char* title, int width, int height, int bpp);
+    Game(std::string filename);
+    bool init_sdl(const char* title, int width, int height, int bpp);
     void handle_events();
     void draw();
     void clean();
@@ -18,10 +22,8 @@ private:
     int height_;
     int bpp_;
 
-    int x_;
-    int y_;
-    int grab_x_;
-    int grab_y_;
+    Collection collection_;
+    Vec2i grab_pt_;
     int grab_;
 };
 
