@@ -74,6 +74,6 @@ bool Collection::popup(Vec2i p) {
 
 void Collection::topmost_move(Vec2i dxdy) {
     sort();
-    pos[pos.size()-1] = pos[pos.size()-1] + dxdy;
+    pos.back() = pos.back() + dxdy;
 }
 

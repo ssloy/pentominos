@@ -36,11 +36,17 @@ void Game::handle_events() {
     SDL_Event event;
     if (SDL_PollEvent(&event)) {
         running_ = !(SDL_QUIT==event.type || (SDL_KEYDOWN==event.type && SDLK_ESCAPE==event.key.keysym.sym));
-         if (SDL_MOUSEBUTTONDOWN==event.type && SDL_BUTTON_LEFT==event.button.button) {
+         if (SDL_MOUSEBUTTONDOWN==event.type && (SDL_BUTTON_LEFT==event.button.button || SDL_BUTTON_RIGHT==event.button.button || SDL_BUTTON_MIDDLE==event.button.button)) {
             Vec2i p = Vec2i(event.button.x, event.button.y);
             if (collection_.popup(p)) {
-                grab_ = 1;
-                grab_pt_ = p;
+                if (SDL_BUTTON_RIGHT==event.button.button) {
+                    collection_.pieces.back().rotate();
+                } else if (SDL_BUTTON_MIDDLE==event.button.button) {
+                    collection_.pieces.back().flip();
+                } else if (SDL_BUTTON_LEFT==event.button.button) {
+                    grab_ = 1;
+                    grab_pt_ = p;
+                }
             }
          }
          if (SDL_MOUSEBUTTONUP==event.type && SDL_BUTTON_LEFT==event.button.button) {
@@ -48,7 +54,7 @@ void Game::handle_events() {
          }
          if (event.type == SDL_MOUSEMOTION && grab_>=0) {
             Vec2i p = Vec2i(event.motion.x, event.motion.y);
-            collection_.topmost_move(p-grab_pt_);
+            collection_.pos.back() = collection_.pos.back() + p-grab_pt_;
             grab_pt_ = p;
          }
     }
