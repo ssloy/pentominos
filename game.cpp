@@ -1,6 +1,7 @@
 #include <SDL/SDL.h>
 #include <iostream>
 #include <string>
+#include "collection.h"
 #include "game.h"
 #include "vec2i.h"
 
@@ -40,9 +41,9 @@ void Game::handle_events() {
             Vec2i p = Vec2i(event.button.x, event.button.y);
             if (collection_.popup(p)) {
                 if (SDL_BUTTON_RIGHT==event.button.button) {
-                    collection_.pieces.back().rotate();
+                    collection_.topmost().rotate();
                 } else if (SDL_BUTTON_MIDDLE==event.button.button) {
-                    collection_.pieces.back().flip();
+                    collection_.topmost().flip();
                 } else if (SDL_BUTTON_LEFT==event.button.button) {
                     grab_ = 1;
                     grab_pt_ = p;
@@ -54,7 +55,7 @@ void Game::handle_events() {
          }
          if (event.type == SDL_MOUSEMOTION && grab_>=0) {
             Vec2i p = Vec2i(event.motion.x, event.motion.y);
-            collection_.pos.back() = collection_.pos.back() + p-grab_pt_;
+            collection_.topmost().pos = collection_.topmost().pos + p - grab_pt_;
             grab_pt_ = p;
          }
     }

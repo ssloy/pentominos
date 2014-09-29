@@ -42,6 +42,7 @@ int Piece::h() {
     return abs(rotate_wo_offset(Vec2i(width_, height_)).y);
 }
 
+// TODO: need to fix the rotation direction that depends on the flip_
 void Piece::rotate() {
     int tmp =  cos_;
     cos_    = -sin_;
